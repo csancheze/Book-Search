@@ -2,7 +2,7 @@ const { Book, User } = require('../models')
 
 const resolvers = {
     Query: {
-        user: async ( parent, {user = null, _id, username}) => {
+        user: async ( parent, { _id, username}, {user = null}) => {
             return User.findOne({
                 $or: [{ _id: user ? user._id : _id}, { username: username }],
               });
