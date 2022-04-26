@@ -16,14 +16,10 @@ const SavedBooks = () => {
   const { loading, data} = useQuery(  QUERY_ME )
   const [ deleteBook , {error}] = useMutation(DELETE_BOOK)
 
-  const user = data?.me
+  const userData = data?.me
 
   if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
     return <Navigate to="/saved" />;
-  }
-
-  if (loading) {
-    return <div> Loading </div>
   }
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
@@ -34,30 +30,23 @@ const SavedBooks = () => {
     if (!token) {
       return false;
     }
-     
-    try {
 
-      const { data } = await deleteBook({
-        variables: {booktoDelete}
-      })
+    const { data } = await deleteBook({
+      variables: {booktoDelete}
+    })
       
-      if (data) {
-        alert('Book added')
-        window.location.reload
-      } else {
-        alert('failed to delete')
-      }
-
-  };
-
-  // if data isn't here yet, say so
-  if (!userDataLength) {
-    return <h2>LOADING...</h2>;
+    if (data) {
+      removeBookId(bookId);
+      alert('Book deleted')
+    } else {
+      alert('failed to delete')
+    }
   }
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
+    { loading ? (<div>loading..</div>) : 
+    (<div><Jumbotron fluid className='text-light bg-dark'>
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
@@ -86,7 +75,18 @@ const SavedBooks = () => {
           })}
         </CardColumns>
       </Container>
+      </div> 
+      
+      )}
+
+{error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {error.message}
+              </div>
+            )}
+    
     </>
+    
   );
 };
 
