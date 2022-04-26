@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { createUser } from '../utils/API';
+// import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
+
+import { useMutation } from '@apollo/client';
+import { CREATE_USER } from '../utils/mutations';
 
 const SignupForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+
+  const [addUser, {error, data}] = useMutation(CREATE_USER)
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
@@ -28,20 +33,15 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await createUser(userFormData);
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
-      setShowAlert(true);
+      Auth.login(data.addUser.token);
+    } catch (e) {
+      console.error(e);
     }
-
+  
     setUserFormData({
       username: '',
       email: '',
@@ -51,7 +51,12 @@ const SignupForm = () => {
 
   return (
     <>
-      {/* This is needed for the validation functionality above */}
+    { data ? (
+      <p>
+      Success! You may now head{' '}
+      <Link to="/">back to the homepage.</Link>
+    </p> ) : (
+
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         {/* show alert if server response is bad */}
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
@@ -103,6 +108,13 @@ const SignupForm = () => {
           Submit
         </Button>
       </Form>
+      
+      )}
+       {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {error.message}
+              </div>
+            )}
     </>
   );
 };
