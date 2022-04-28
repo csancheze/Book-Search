@@ -28,7 +28,7 @@ Currently in develop
 
   
   
-![Book Search webpage working as expected](assets/images/screenshot.png)
+![Book Search webpage working as expected](img/screenshot.png)
   
   ## License
   
