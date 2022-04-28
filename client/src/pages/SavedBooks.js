@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
-
-import { useQuery } from '@apollo/client';
+// import { getMe, deleteBook } from '../utils/API';
+import { Navigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
 import { DELETE_BOOK } from '../utils/mutations';
 
@@ -18,7 +18,7 @@ const SavedBooks = () => {
 
   const userData = data?.me
 
-  if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
+  if (Auth.loggedIn()) {
     return <Navigate to="/saved" />;
   }
 

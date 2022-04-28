@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
+
+import { Link } from 'react-router-dom';
 // import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
@@ -31,7 +33,7 @@ const LoginForm = () => {
 
     try {
       const { data } = await login({
-        variables: { ...formState },
+        variables: { userFormData },
       });
 
       Auth.login(data.login.token);

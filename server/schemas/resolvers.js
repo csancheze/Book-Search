@@ -1,8 +1,10 @@
-const { Book, User } = require('../models')
+const { User } = require('../models')
+const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
     Query: {
-        user: async ( parent, { _id, username}, {user = null}) => {
+        user: async ( parent, { _id, username}, {user}) => {
             return User.findOne({
                 $or: [{ _id: user ? user._id : _id}, { username: username }],
               });
