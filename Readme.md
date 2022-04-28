@@ -3,7 +3,7 @@
   ## Description
   
   
-This is a MERN application that uses GraphQL for a back-end using mongoose and a Front End by using React.
+This is a MERN application that uses GraphQL for a back-end using mongoose and a Front End by using React. All the coding is done but I was unable to check it do to an error connecting to the GraphQL.
 
   
   ## Table of Contents
